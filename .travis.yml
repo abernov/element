@@ -13,6 +13,7 @@ after_success:
 - cat ./test/unit/coverage/lcov.info | ./node_modules/.bin/coveralls
 deploy:
   provider: releases
+  github-token: $GITHUB_TOKEN 
   api_key: "GITHUB OAUTH TOKEN"
   file: "FILE TO UPLOAD"
   skip_cleanup: true
