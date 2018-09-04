@@ -14,5 +14,7 @@ after_success:
 - sh build/deploy-ci.sh
 - cat ./test/unit/coverage/lcov.info | ./node_modules/.bin/coveralls
 script:
-- npm run deploy
 - echo $TRAVIS_COMMIT_USER
+- echo $TRAVIS_COMMIT_EMAIL
+- npm run deploy
+
