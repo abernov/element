@@ -15,10 +15,9 @@ after_success:
 - cat ./test/unit/coverage/lcov.info | ./node_modules/.bin/coveralls
 script:
 - npm run deploy
-- echo $GITHUB_TOKEN
 deploy:
   api_key:
-    secure: $TRAVIS_TOKEN
+    secure: $GITHUB_TOKEN
   provider: releases
   overwrite: true
   file_glob: true
