@@ -15,7 +15,6 @@ after_success:
 - cat ./test/unit/coverage/lcov.info | ./node_modules/.bin/coveralls
 script:
 - npm run deploy
-before_deploy:
 - ls -l
 deploy:
   api_key:
