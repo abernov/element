@@ -16,8 +16,8 @@ after_success:
 script:
 - npm run deploy
 deploy:
-  user: $GUSER
-  password: $GPW
+  api_key:
+    secure: $GITHUB_TOKEN
   provider: releases
   overwrite: true
   file_glob: true
