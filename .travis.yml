@@ -12,7 +12,7 @@ after_success:
 - sh build/deploy-ci.sh
 - cat ./test/unit/coverage/lcov.info | ./node_modules/.bin/coveralls
 script:
-- npm build
+- npm run pub
 before_deploy: ls -l
 
 deploy:
