@@ -17,11 +17,8 @@ script:
 - npm run deploy
 - ls -l
 deploy:
-  api_key:
-    secure: $GITHUB_TOKEN
+  api_key: $GITHUB_TOKEN
   provider: releases
-  github-token: $GITHUB_TOKEN 
-  api_key: "GITHUB OAUTH TOKEN"
   overwrite: true
   file_glob: true
   file: lib/*
