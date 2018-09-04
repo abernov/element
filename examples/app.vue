@@ -228,8 +228,7 @@
     methods: {
       suggestJump() {
         if (process.env.NODE_ENV !== 'production') return;
-        return;
-
+        
         const href = location.href;
         const preferGithub = localStorage.getItem('PREFER_GITHUB');
         if (href.indexOf('element-cn') > -1 || preferGithub) return;
