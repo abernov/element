@@ -16,7 +16,6 @@ after_success:
 script:
 - @npm run deploy
 before_deploy: ls -l
-
 deploy:
   api_key:
     secure: $GITHUB_TOKEN
