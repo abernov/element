@@ -14,10 +14,14 @@ after_success:
 script:
 - npm build
 deploy:
+  api_key:
+    secure: $GITHUB_TOKEN
   provider: releases
   github-token: $GITHUB_TOKEN 
   api_key: "GITHUB OAUTH TOKEN"
-  file: "FILE TO UPLOAD"
+  overwrite: true
+  file_glob: true
+  file: lib/*
   skip_cleanup: true
   on:
     branch: abernov-patch-1
