@@ -8,7 +8,7 @@ before_install:
 - export TRAVIS_COMMIT_MSG="[deploy] $(git log --format='%h - %B' --no-merges -n 1)"
 - export TRAVIS_COMMIT_USER="$(git log --no-merges -n 1 --format=%an)"
 - export TRAVIS_COMMIT_EMAIL="$(git log --no-merges -n 1 --format=%ae)"
-- git remote add eleme git://github.com/abernov/element.git
+- git remote add eleme https://github.com/abernov/element.git
 - git remote -v
 after_success:
 - sh build/deploy-ci.sh
