@@ -17,15 +17,7 @@ after_success:
 script:
 - echo $TRAVIS_COMMIT_USER
 - echo $TRAVIS_COMMIT_EMAIL
+- echo $TRAVIS_TAG
+- echo $ROT_TOKEN
 - npm run dist
 - ls -l
-deploy:
-  api_key:
-    secure: $GITHUB_TOKEN
-  provider: releases
-  overwrite: true
-  file_glob: true
-  file: lib/*
-  skip_cleanup: true
-  on:
-    branch: abernov-patch-1
