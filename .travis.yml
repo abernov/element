@@ -17,5 +17,7 @@ after_success:
 script:
 - echo $TRAVIS_COMMIT_USER
 - echo $TRAVIS_COMMIT_EMAIL
-- npm run deploy
+- npm run dist
+- ls -l
+
 
