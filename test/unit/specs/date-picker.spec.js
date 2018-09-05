@@ -1329,6 +1329,71 @@ describe('DatePicker', () => {
         }, DELAY);
       }, DELAY);
     });
+
+    it('select time honors picked date', done => {
+      vm = createVue({
+        template: '<el-date-picker type="datetime" v-model="value" ref="compo" />',
+        data() {
+          return {
+            value: new Date(2000, 9, 1, 12, 0, 0) // 2010-10-01 12:00:00
+          };
+        }
+      }, true);
+      vm.$refs.compo.$el.querySelector('input').focus();
+      setTimeout(_ => {
+        // changed month / year should not effect picked time
+        vm.$refs.compo.picker.$el.querySelector('.el-date-picker__header .el-icon-arrow-right').click();
+        setTimeout(_ => {
+          vm.$refs.compo.picker.$el.querySelector('.el-date-picker__header .el-icon-d-arrow-right').click();
+          setTimeout(_ => {
+            // simulate time selection
+            // handleTimePick takes Date object, but it's non-time fields are ignored
+            vm.$refs.compo.picker.handleTimePick(new Date(2001, 10, 10, 13, 14, 15), false, false);
+            setTimeout(_ => {
+              expect(vm.value.getFullYear()).to.equal(2000);
+              expect(vm.value.getMonth()).to.equal(9);
+              expect(vm.value.getDate()).to.equal(1);
+              expect(vm.value.getHours()).to.equal(13);
+              expect(vm.value.getMinutes()).to.equal(14);
+              expect(vm.value.getSeconds()).to.equal(15);
+              done();
+            }, DELAY);
+          }, DELAY);
+        }, DELAY);
+      }, DELAY);
+    });
+
+    it('confirm button honors picked date', done => {
+      vm = createVue({
+        template: '<el-date-picker type="datetime" v-model="value" ref="compo" />',
+        data() {
+          return {
+            value: new Date(2000, 9, 1, 12, 0, 0) // 2010-10-01 12:00:00
+          };
+        }
+      }, true);
+      vm.$refs.compo.$el.querySelector('input').focus();
+      setTimeout(_ => {
+        // changed month / year should not effect picked time
+        vm.$refs.compo.picker.$el.querySelector('.el-date-picker__header .el-icon-arrow-right').click();
+        setTimeout(_ => {
+          vm.$refs.compo.picker.$el.querySelector('.el-date-picker__header .el-icon-d-arrow-right').click();
+          setTimeout(_ => {
+            // click confirm button
+            vm.$refs.compo.picker.$el.querySelector('.el-picker-panel__footer .el-button--default').click();
+            setTimeout(_ => {
+              expect(vm.value.getFullYear()).to.equal(2000);
+              expect(vm.value.getMonth()).to.equal(9);
+              expect(vm.value.getDate()).to.equal(1);
+              expect(vm.value.getHours()).to.equal(12);
+              expect(vm.value.getMinutes()).to.equal(0);
+              expect(vm.value.getSeconds()).to.equal(0);
+              done();
+            }, DELAY);
+          }, DELAY);
+        }, DELAY);
+      }, DELAY);
+    });
   });
 
   describe('type:week', () => {
@@ -1452,22 +1517,11 @@ describe('DatePicker', () => {
       const td = vm.$refs.compo.picker.$el.querySelector('.el-date-table__row .available');
       td.click();
       setTimeout(_ => {
-        expect(vm.$refs.compo.picker.selectedDate).to.exist;
+        expect(vm.$refs.compo.value).to.be.an('array');
+        expect(vm.$refs.compo.value.length).to.equal(1);
+        expect(vm.$refs.compo.value[0]).to.be.a('number');
         expect(vm.value.length).to.equal(1);
         done();
-      }, DELAY);
-    });
-
-    it('value format', done => {
-      const td = vm.$refs.compo.picker.$el.querySelector('.el-date-table__row .available');
-      td.click();
-      setTimeout(_ => {
-        vm.$refs.compo.picker.$el.querySelector('.el-button--default').click();
-        setTimeout(() => {
-          expect(vm.$refs.compo.picker.selectedDate).to.exist;
-          expect(vm.value.length).to.equal(1);
-          done();
-        }, DELAY);
       }, DELAY);
     });
 
@@ -1858,6 +1912,17 @@ describe('DatePicker', () => {
           const leftCell = pickers[0].querySelector('td.available');
           const rightCell = pickers[1].querySelector('td.available');
 
+          const {
+            minDate,
+            maxDate
+          } = vm.picker;
+          expect(minDate.getHours()).to.be.equal(10);
+          expect(minDate.getMinutes()).to.be.equal(10);
+          expect(minDate.getSeconds()).to.be.equal(0);
+          expect(maxDate.getHours()).to.be.equal(10);
+          expect(maxDate.getMinutes()).to.be.equal(10);
+          expect(maxDate.getSeconds()).to.be.equal(0);
+
           triggerEvent(leftCell, 'mousemove', true);
           setTimeout(_ => {
             triggerEvent(leftCell, 'click', true);
@@ -1958,6 +2023,17 @@ describe('DatePicker', () => {
           const pickers = vm.picker.$el.querySelectorAll('.el-date-range-picker__content');
           const leftCell = pickers[0].querySelector('td.available');
           const rightCell = pickers[1].querySelector('td.available');
+
+          const {
+            minDate,
+            maxDate
+          } = vm.picker;
+          expect(minDate.getHours()).to.be.equal(10);
+          expect(minDate.getMinutes()).to.be.equal(10);
+          expect(minDate.getSeconds()).to.be.equal(0);
+          expect(maxDate.getHours()).to.be.equal(10);
+          expect(maxDate.getMinutes()).to.be.equal(10);
+          expect(maxDate.getSeconds()).to.be.equal(0);
 
           triggerEvent(leftCell, 'mousemove', true);
           setTimeout(_ => {

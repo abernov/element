@@ -409,7 +409,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 
 在防止用户犯错的前提下，尽可能让用户更早地发现并纠正错误。
 
-:::demo Form 组件提供了表单验证的功能，只需要通过 `rules` 属性传入约定的验证规则，并 Form-Item 的 `prop` 属性设置为需校验的字段名即可。校验规则参见 [async-validator](https://github.com/yiminghe/async-validator)
+:::demo Form 组件提供了表单验证的功能，只需要通过 `rules` 属性传入约定的验证规则，并将 Form-Item 的 `prop` 属性设置为需校验的字段名即可。校验规则参见 [async-validator](https://github.com/yiminghe/async-validator)
 ```html
 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
   <el-form-item label="活动名称" prop="name">
@@ -527,10 +527,10 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 ```html
 <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
   <el-form-item label="密码" prop="pass">
-    <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+    <el-input type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item label="确认密码" prop="checkPass">
-    <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+    <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item label="年龄" prop="age">
     <el-input v-model.number="ruleForm2.age"></el-input>
@@ -706,7 +706,7 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
       { type: 'number', message: '年龄必须为数字值'}
     ]"
   >
-    <el-input type="age" v-model.number="numberValidateForm.age" auto-complete="off"></el-input>
+    <el-input type="age" v-model.number="numberValidateForm.age" autocomplete="off"></el-input>
   </el-form-item>
   <el-form-item>
     <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
@@ -839,8 +839,8 @@ W3C 标准中有如下[规定](https://www.w3.org/MarkUp/html-spec/html-spec_8.h
 |---------- |-------------- | --------------
 | validate | 对整个表单进行校验的方法，参数为一个回调函数。该回调函数会在校验结束后被调用，并传入两个参数：是否校验成功和未通过校验的字段。若不传入回调函数，则会返回一个 promise | Function(callback: Function(boolean, object))
 | validateField | 对部分表单字段进行校验的方法 | Function(prop: string, callback: Function(errorMessage: string))
-| resetFields | 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果 | -
-| clearValidate | 移除整个表单的校验结果 | -
+| resetFields | 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果 | —
+| clearValidate | 移除表单项的校验结果。传入待移除的表单项的 prop 属性组成的数组，如不传则移除整个表单的校验结果 | Function(props: array)
 
 ### Form Events
 | 事件名称 | 说明    | 回调参数  |
