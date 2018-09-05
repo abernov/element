@@ -19,5 +19,13 @@ script:
 - echo $TRAVIS_COMMIT_EMAIL
 - npm run dist
 - ls -l
-
-
+deploy:
+  api_key:
+    secure: $GITHUB_TOKEN
+  provider: releases
+  overwrite: true
+  file_glob: true
+  file: lib/*
+  skip_cleanup: true
+  on:
+    branch: abernov-patch-1
