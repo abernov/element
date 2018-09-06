@@ -102,6 +102,9 @@ export default class TreeStore {
     }
   }
 
+  expand(node, callback, expandParent) {
+    node.expand(callback, expandParent);
+  }
   append(data, parentData, callback) {
     const parentNode = parentData ? this.getNode(parentData) : this.root;
 
