@@ -1,5 +1,59 @@
 ## Changelog
 
+### 2.4.9
+
+*2018-10-26*
+
+- The parameter of Form's  `clearValidate`  supports string, #12990 (by @codinglobster)
+- Added type attribute for Badge, #12991
+- Users can use scoped-slot to customize table column header #13012 (by @ivanseidel)
+- Fixed the input box of Select unable to type text under IE, #13034 (by @GaliMU)
+- Select option does not wrap when space is enough, #12329 (by @akki-jat)
+- When dropdown list of Select is expanded, the arrow icon will also display correctly, #12353 (by @firesh)
+- Fixed that the size attribute of Select does not work, #13070
+- Select multiple values can be cleared, #13049 (by @ZSkycat)
+- Fixed the last TabNav unable be deleted, #13039
+- Fixed that TabNav label is not displayed correctly, #13178
+- Added title slot for Alert, #13082 (by @Kingwl)
+- Fixed an issue where the tooltip content in Table was incorrect, #13159 (by @elfman)
+- Optimize the animation of Upload when file is deleted, #12987
+- Adjusted style of InputNumber when control button is not displayed, #13052
+
+### 2.4.8
+
+- Not displaying outline when Switch is focused, #12771
+- Fixed Dropdown's style in ButtonGroup, #12819 (by @bluejfox)
+- Added opened event for Dialog, #12828
+- Fixed the incorrect display order of TabNav, #12846
+- Fixed the problem that Tabs did not scroll to the selected tab, #12948
+- Fixed the problem that the identifier does not display when the Tree node is dragged, #12854
+- The validate event parameter of Form contains the validation message, #12860 (by @YamenSharaf)
+- Fixed DatePicker not to verify the validity of user input time, #12898
+- Fixed the problem that `render-header` attribute of Table header doesn't work, #12914
+
+### 2.4.7
+
+*2018-09-14*
+
+- Fixed DatePicker not triggering form validation, #12328 #12348 
+- Fixed DatePicker throwing errors in multiple mode, #12347 
+- Fixed incorrect position of DatePicker spinner, #12415 (by @rang-ali)
+- Fixed automatic filling of DatePicker input box, #12521 (by @abdallanayer)
+- Fixed Input not highlighted in Cascader, #12341
+- Fixed wrong order of Tabpane, #12346 
+- Fixed incorrect position of ColorPicker cursor, #12376 (by @cnwhy)
+- Fixed the style of Submenu, #2457
+- Fixed not highlighted after Submenu is selected, #12479
+- Fixed incorrect values selected by Cascader, #12508 (by @huangjinqiang)
+- Fixed incorrect value of Pagination input box, #12525 
+- Fixed order that Pagination triggers events, #12530
+- Fixed Table Filter not displayed, #12539
+- Fixed Tree unable to delete nodes, #12684
+- Fixed height of Select Input changing in single mode, #12719
+- Fixed style of FormItem label in nested Form, #12748
+- Added `autocomplete` attribute for Input, deprecated `auto-complete`, #12514 (by @axetroy)
+- Added slots-scope for Form to display validation information, #12715 (by @YamenSharaf)
+
 ### 2.4.6
 
 *2018-08-09*

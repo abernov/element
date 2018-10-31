@@ -1,5 +1,59 @@
 ## Changelog
 
+### 2.4.9
+
+*2018-10-26*
+
+- The parameter of Form's  `clearValidate`  supports string, #12990 (by @codinglobster)
+- Added type attribute for Badge, #12991
+- Users can use scoped-slot to customize table column header #13012 (by @ivanseidel)
+- Fixed the input box of Select unable to type text under IE, #13034 (by @GaliMU)
+- Select option does not wrap when space is enough, #12329 (by @akki-jat)
+- When dropdown list of Select is expanded, the arrow icon will also display correctly, #12353 (by @firesh)
+- Fixed that the size attribute of Select does not work, #13070
+- Select multiple values can be cleared, #13049 (by @ZSkycat)
+- Fixed the last TabNav unable be deleted, #13039
+- Fixed that TabNav label is not displayed correctly, #13178
+- Added title slot for Alert, #13082 (by @Kingwl)
+- Fixed an issue where the tooltip content in Table was incorrect, #13159 (by @elfman)
+- Optimize the animation of Upload when file is deleted, #12987
+- Adjusted style of InputNumber when control button is not displayed, #13052
+
+### 2.4.8
+
+- No se muestra el contorno cuando Switch está enfocado, #12771
+- Arreglado el estilo del Dropdown en ButtonGroup, #12819 (por @bluejfox)
+- Añadido evento opened para Dialog, #12828
+- Corregido el orden incorrecto de visualización de TabNav, #12846
+- Corregido el problema de que Tabs no se desplazaba a la pestaña seleccionada, #12948
+- Corregido el problema de que el identificador no se mostraba cuando se arrastraba el Tree node, #12854
+- El parámetro validar evento de Form contiene el mensaje de validación, #12860 (por @YamenSharaf)
+- Se ha corregido el DatePicker que no verificaba la validez de la hora de entrada del usuario, #12898
+- Arreglado el problema de que el atributo `render-header` del encabezado de Table no funcionaba, #12914
+
+### 2.4.7
+
+*2018-09-14*
+
+- Corregido que DatePicker no activaba la validación del Form, #12328 #12348 
+- Corregidos el lanzamiento de errores del DatePicker en modo múltiple, #12347 
+- Corregida la posición incorrecta del spinner del DatePicker, #12415 (por @rang-ali)
+- Se ha corregido el llenado automático del input del DatePicker, #12521 (por @abdallanayer)
+- Corregida el input no resaltada en Cascader, #12341
+- Corregido el orden incorrecto de Tabpane, #12346 
+- Corregida la posición incorrecta del cursor de ColorPicker, #12376 (por @cnwhy)
+- Corregido el estilo del Submenú, #2457
+- Corregido el resaltado después de seleccionar el Submenú, #12479
+- Corregidos los valores incorrectos seleccionados por Cascader, #12508 (por @huangjinqiang)
+- Corregido el valor incorrecto del input de Paginación, #12525 
+- Se ha corregido el orden en que la paginación desencadena los eventos, #12530
+- Corregido que no se mostraba el Table Filter, #12539
+- Corregido Tree que era incapaz de borrar nodos, #12684
+- Corregida la altura de los Select Input que cambiaba en modo simple, #12719
+- Arreglado el estilo de la etiqueta FormItem en Form anidado, #12748
+- Añadido el atributo `autocomplete` para Input, obsoleto `auto-complete`, #12514 (por @axetroy)
+- Añadido el slots-scope de Form para mostrar la información de validación, #12715 (por @YamenSharaf)
+
 ### 2.4.6
 
 *2018-08-09*
@@ -316,8 +370,10 @@
   - Corregido el layout que no se actualizaba cuando el ancho de columna era cambiado por el usuario arrastrando, #9668
   - Corregido problema de estilo cuando la fila de resumen coexistia con columnas fijas, #9667
 - Container
+
   - Corregido componentes del Container que no se estiraban en IE11, #9655
 - Loading
+
   - Corregido Loading no se mostraba cuando el valor de `v-loading` era cambiado a true en el `hook`  `mounted`, #9722
 - Switch
   - Corregido se disparaban los dos eventos nativos de click cuando se hacia click en el Switch, #9760

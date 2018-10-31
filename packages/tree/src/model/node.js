@@ -294,7 +294,7 @@ export default class Node {
     let targetNode = null;
 
     for (let i = 0; i < this.childNodes.length; i++) {
-      if (this.childNodes[i] === data) {
+      if (this.childNodes[i].data === data) {
         targetNode = this.childNodes[i];
         break;
       }
@@ -347,9 +347,9 @@ export default class Node {
   close() {
     this.collapse();
     if (this.loaded) {
-      this.childNodes.forEach((node) => {
-        node.remove();
-      });
+      for (let i = this.childNodes.length - 1; i >= 0; i--) {
+        this.childNodes[i].remove();
+      }
       this.loaded = false;
       this.updateLeafState();
     }
