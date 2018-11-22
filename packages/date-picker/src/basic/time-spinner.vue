@@ -1,5 +1,5 @@
 <template>
-  <div class="el-time-spinner" :class="{ 'has-seconds': showSeconds }">
+  <div class="el-time-spinner" :class="{ 'has-seconds': showSeconds, 'has-milli': showMillisecs }">
     <template v-if="!arrowControl">
       <el-scrollbar
         @mouseenter.native="emitSelectRange('hours')"
@@ -48,6 +48,23 @@
           :class="{ 'active': key === seconds }"
           :key="key">{{ ('0' + key).slice(-2) }}</li>
       </el-scrollbar>
+      <el-scrollbar
+        v-show="showMillisecs"
+        @mouseenter.native="emitSelectRange('millisecs')"
+        @mousemove.native="adjustCurrentSpinner('millisecs')"
+        class="el-time-spinner__wrapper"
+        wrap-style="max-height: inherit;"
+        view-class="el-time-spinner__list"
+        noresize
+        tag="ul"
+        ref="millisecs">
+        <li
+          @click="handleClick('millisecs', { value: key, disabled: false })"
+          v-for="(millisec, key) in maxMillisecs"
+          class="el-time-spinner__item"
+          :class="{ 'active': key === millisecs }"
+          :key="key">{{ ('0'.repeat(showMillisecs ? showMillisecs-1 : 0) + key).slice(-showMillisecs) }}</li>
+      </el-scrollbar>
     </template>
     <template v-if="arrowControl">
       <div
@@ -94,6 +111,22 @@
           </li>
         </ul>
       </div>
+      <div
+        @mouseenter="emitSelectRange('millisecs')"
+        class="el-time-spinner__wrapper is-arrow"
+        v-if="showMillisecs">
+        <i v-repeat-click="decrease" class="el-time-spinner__arrow el-icon-arrow-up"></i>
+        <i v-repeat-click="increase" class="el-time-spinner__arrow el-icon-arrow-down"></i>
+        <ul class="el-time-spinner__list" ref="millisecs">
+          <li
+            v-for="(millisec, key) in arrowMillisecList"
+            class="el-time-spinner__item"
+            :class="{ 'active': millisec === millisecs }"
+            :key="key">
+            {{ millisec === undefined ? '' : ('0'.repeat(showMillisecs ? showMillisecs - 1 : 0) + millisec).slice(-showMillisecs) }}
+          </li>
+        </ul>
+      </div>
     </template>
   </div>
 </template>
@@ -117,6 +150,14 @@
         type: Boolean,
         default: true
       },
+      showMillisecs: {
+        type: Number,
+        default: 0
+      },
+      fps: {
+        type: Number,
+        default: 0
+      },
       arrowControl: Boolean,
       amPmMode: {
         type: String,
@@ -133,6 +174,15 @@
       },
       seconds() {
         return this.date.getSeconds();
+      },
+      millisecs() {
+        console.log('Showms %o', this.date.getMilliseconds());
+        return this.date.getMilliseconds() / 1000 * this.maxMillisecs ^ 0;
+      },
+      maxMillisecs() {
+        console.log('fps=%o showMS=%o', this.fps, this.showMillisecs);
+        let max = Math.pow(10, this.showMillisecs) ^ 0;
+        return this.fps ? this.fps : max;
       },
       hoursList() {
         return getRangeHours(this.selectableRange);
@@ -163,6 +213,14 @@
           seconds,
           seconds < 59 ? seconds + 1 : undefined
         ];
+      },
+      arrowMillisecList() {
+        const millisecs = this.millisecs;
+        return [
+          millisecs > 0 ? millisecs - 1 : undefined,
+          millisecs,
+          millisecs < this.maxMillisecs - 1 ? millisecs + 1 : undefined
+        ];
       }
     },
 
@@ -189,10 +247,13 @@
       },
 
       modifyDateField(type, value) {
+        this.date.setMilliseconds((type === 'millisecs' ? value : this.millisecs) * 1000 / this.maxMillisecs ^ 0);
+        console.log('value=%o ms=%o', value, this.date.getMilliseconds());
         switch (type) {
           case 'hours': this.$emit('change', modifyTime(this.date, value, this.minutes, this.seconds)); break;
           case 'minutes': this.$emit('change', modifyTime(this.date, this.hours, value, this.seconds)); break;
           case 'seconds': this.$emit('change', modifyTime(this.date, this.hours, this.minutes, value)); break;
+          case 'millisecs': this.$emit('change', modifyTime(this.date, this.hours, this.minutes, this.seconds)); break;
         }
       },
 
@@ -211,6 +272,8 @@
           this.$emit('select-range', 3, 5);
         } else if (type === 'seconds') {
           this.$emit('select-range', 6, 8);
+        } else if (type === 'millisecs') {
+          this.$emit('select-range', 9, 10 + this.showMillisecs);
         }
         this.currentScrollbar = type;
       },
@@ -226,10 +289,11 @@
         bindFuntion('hours');
         bindFuntion('minutes');
         bindFuntion('seconds');
+        bindFuntion('millisecs');
       },
 
       handleScroll(type) {
-        const value = Math.min(Math.floor((this.$refs[type].wrap.scrollTop - (this.scrollBarHeight(type) * 0.5 - 10) / this.typeItemHeight(type) + 3) / this.typeItemHeight(type)), (type === 'hours' ? 23 : 59));
+        const value = Math.min(Math.floor((this.$refs[type].wrap.scrollTop - (this.scrollBarHeight(type) * 0.5 - 10) / this.typeItemHeight(type) + 3) / this.typeItemHeight(type)), (type === 'hours' ? 23 : type !== 'millisecs' ? 59 : this.maxMillisecs - 1));
         this.modifyDateField(type, value);
       },
 
@@ -240,6 +304,7 @@
         this.adjustSpinner('hours', this.hours);
         this.adjustSpinner('minutes', this.minutes);
         this.adjustSpinner('seconds', this.seconds);
+        this.adjustSpinner('millisecs', this.millisecs);
       },
 
       adjustCurrentSpinner(type) {
@@ -275,8 +340,10 @@
             total--;
           }
           if (hoursList[now]) return;
-        } else {
+        } else if (this.currentScrollbar !== 'millisecs') {
           now = (now + step + 60) % 60;
+        } else {
+          now = (now + step + this.maxMillisecs) % this.maxMillisecs;
         }
 
         this.modifyDateField(label, now);

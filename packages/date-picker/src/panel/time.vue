@@ -10,6 +10,8 @@
           @change="handleChange"
           :arrow-control="useArrow"
           :show-seconds="showSeconds"
+          :show-millisecs="showMillisecs"
+          :fps="fps"
           :am-pm-mode="amPmMode"
           @select-range="setSelectionRange"
           :date="date">
@@ -95,13 +97,18 @@
         selectionRange: [0, 2],
         disabled: false,
         arrowControl: false,
-        needInitAdjust: true
+        needInitAdjust: true,
+        fps: 0
       };
     },
 
     computed: {
       showSeconds() {
         return (this.format || '').indexOf('ss') !== -1;
+      },
+      showMillisecs() {
+        console.log('showMillisecs fps=%o format-%o', this.fps, this.format);
+        return ((this.format || '').match(/S/g) || []).length;
       },
       useArrow() {
         return this.arrowControl || this.timeArrowControl || false;
@@ -121,7 +128,7 @@
       handleChange(date) {
         // this.visible avoids edge cases, when use scrolls during panel closing animation
         if (this.visible) {
-          this.date = clearMilliseconds(date);
+          this.date = this.showMillisecs ? date : clearMilliseconds(date);
           // if date is out of range, do not emit
           if (this.isValidValue(this.date)) {
             this.$emit('pick', this.date, true);
@@ -136,8 +143,8 @@
 
       handleConfirm(visible = false, first) {
         if (first) return;
-        const date = clearMilliseconds(limitTimeRange(this.date, this.selectableRange, this.format));
-        this.$emit('pick', date, visible, first);
+        const date = limitTimeRange(this.date, this.selectableRange, this.format);
+        this.$emit('pick', this.showMillisecs ? date : clearMilliseconds(date), visible, first);
       },
 
       handleKeydown(event) {

@@ -9,7 +9,11 @@ export default {
 
   props: {
     isRange: Boolean,
-    arrowControl: Boolean
+    arrowControl: Boolean,
+    fps: {
+      type: Number,
+      default: 0
+    }
   },
 
   data() {

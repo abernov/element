@@ -15,6 +15,8 @@
             <time-spinner
               ref="minSpinner"
               :show-seconds="showSeconds"
+              :show-millisecs="showMillisecs"
+              :fps="fps"
               :am-pm-mode="amPmMode"
               @change="handleMinChange"
               :arrow-control="arrowControl"
@@ -31,6 +33,8 @@
             <time-spinner
               ref="maxSpinner"
               :show-seconds="showSeconds"
+              :show-millisecs="showMillisecs"
+              :fps="fps"
               :am-pm-mode="amPmMode"
               @change="handleMaxChange"
               :arrow-control="arrowControl"
@@ -72,7 +76,7 @@
   const minTimeOfDay = function(date) {
     return modifyDate(MIN_TIME, date.getFullYear(), date.getMonth(), date.getDate());
   };
-  
+
   const maxTimeOfDay = function(date) {
     return modifyDate(MAX_TIME, date.getFullYear(), date.getMonth(), date.getDate());
   };
@@ -90,6 +94,11 @@
     computed: {
       showSeconds() {
         return (this.format || '').indexOf('ss') !== -1;
+      },
+
+      showMillisecs() {
+        console.log('showMillisecs fps=%o format-%o', this.fps, this.format);
+        return ((this.format || '').match(/S/g) || []).length;
       },
 
       offset() {
@@ -121,7 +130,8 @@
         format: 'HH:mm:ss',
         visible: false,
         selectionRange: [0, 2],
-        arrowControl: false
+        arrowControl: false,
+        fps: 0
       };
     },
 
@@ -162,12 +172,12 @@
       },
 
       handleMinChange(date) {
-        this.minDate = clearMilliseconds(date);
+        this.minDate = this.showMillisecs ? date : clearMilliseconds(date);
         this.handleChange();
       },
 
       handleMaxChange(date) {
-        this.maxDate = clearMilliseconds(date);
+        this.maxDate = this.showMillisecs ? date : clearMilliseconds(date);
         this.handleChange();
       },
 

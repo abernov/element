@@ -5,6 +5,11 @@
     .el-time-spinner__wrapper {
       width: 33.3%;
     }
+    &.has-milli {
+      .el-time-spinner__wrapper {
+        width: 25;
+      }
+    }
   }
 
   @include e(wrapper) {
