@@ -10,9 +10,9 @@ export default {
   props: {
     isRange: Boolean,
     arrowControl: Boolean,
-    fps: {
+    millisecStep: {
       type: Number,
-      default: 0
+      default: 1
     }
   },
 

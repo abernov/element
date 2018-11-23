@@ -16,7 +16,7 @@
               ref="minSpinner"
               :show-seconds="showSeconds"
               :show-millisecs="showMillisecs"
-              :fps="fps"
+              :millisec-Step="millisecStep"
               :am-pm-mode="amPmMode"
               @change="handleMinChange"
               :arrow-control="arrowControl"
@@ -34,7 +34,7 @@
               ref="maxSpinner"
               :show-seconds="showSeconds"
               :show-millisecs="showMillisecs"
-              :fps="fps"
+              :millisec-Step="millisecStep"
               :am-pm-mode="amPmMode"
               @change="handleMaxChange"
               :arrow-control="arrowControl"
@@ -97,12 +97,12 @@
       },
 
       showMillisecs() {
-        console.log('showMillisecs fps=%o format-%o', this.fps, this.format);
+        console.log('showMillisecs mullisecStep=%o format-%o', this.millisecStep, this.format);
         return ((this.format || '').match(/S/g) || []).length;
       },
 
       offset() {
-        return this.showSeconds ? 11 : 8;
+        return this.showSeconds ? this.showMillisecs ? 12 + this.showMillisecs : 11 : 8;
       },
 
       spinner() {
@@ -131,7 +131,7 @@
         visible: false,
         selectionRange: [0, 2],
         arrowControl: false,
-        fps: 0
+        millisecStep: 1
       };
     },
 
@@ -215,8 +215,10 @@
       },
 
       changeSelectionRange(step) {
-        const list = this.showSeconds ? [0, 3, 6, 11, 14, 17] : [0, 3, 8, 11];
-        const mapping = ['hours', 'minutes'].concat(this.showSeconds ? ['seconds'] : []);
+        let ms = this.showMillisecs;
+        console.log('ms=%o', ms);
+        const list = this.showSeconds ? ms ? [0, 3, 6, 9, 12 + ms, 15 + ms, 18 + ms, 21 + ms] : [0, 3, 6, 11, 14, 17] : [0, 3, 8, 11];
+        const mapping = ['hours', 'minutes'].concat(this.showSeconds ? ['seconds'] : []).concat(ms ? ['millisecs'] : []);
         const index = list.indexOf(this.selectionRange[0]);
         const next = (index + step + list.length) % list.length;
         const half = list.length / 2;

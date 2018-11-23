@@ -11,7 +11,7 @@
           :arrow-control="useArrow"
           :show-seconds="showSeconds"
           :show-millisecs="showMillisecs"
-          :fps="fps"
+          :millisec-step="millisecStep"
           :am-pm-mode="amPmMode"
           @select-range="setSelectionRange"
           :date="date">
@@ -98,7 +98,7 @@
         disabled: false,
         arrowControl: false,
         needInitAdjust: true,
-        fps: 0
+        millisecStep: 1
       };
     },
 
@@ -107,7 +107,7 @@
         return (this.format || '').indexOf('ss') !== -1;
       },
       showMillisecs() {
-        console.log('showMillisecs fps=%o format-%o', this.fps, this.format);
+        console.log('showMillisecs millisecStep=%o format-%o', this.millisecStep, this.format);
         return ((this.format || '').match(/S/g) || []).length;
       },
       useArrow() {
@@ -137,6 +137,7 @@
       },
 
       setSelectionRange(start, end) {
+        console.log('setSelectionRange start=%o end=%o', start, end);
         this.$emit('select-range', start, end);
         this.selectionRange = [start, end];
       },
@@ -177,8 +178,9 @@
       },
 
       changeSelectionRange(step) {
-        const list = [0, 3].concat(this.showSeconds ? [6] : []);
-        const mapping = ['hours', 'minutes'].concat(this.showSeconds ? ['seconds'] : []);
+        const list = [0, 3].concat(this.showSeconds ? [6] : []).concat(this.showMillisecs ? ['millisecs'] : []);
+        const mapping = ['hours', 'minutes'].concat(this.showSeconds ? ['seconds'] : []).concat(this.showMillisecs ? ['millisecs'] : []);
+        console.log('mapping =%o', mapping);
         const index = list.indexOf(this.selectionRange[0]);
         const next = (index + step + list.length) % list.length;
         this.$refs.spinner.emitSelectRange(mapping[next]);

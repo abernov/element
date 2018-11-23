@@ -154,9 +154,9 @@
         type: Number,
         default: 0
       },
-      fps: {
+      millisecStep: {
         type: Number,
-        default: 0
+        default: 1
       },
       arrowControl: Boolean,
       amPmMode: {
@@ -180,9 +180,7 @@
         return this.date.getMilliseconds() / 1000 * this.maxMillisecs ^ 0;
       },
       maxMillisecs() {
-        console.log('fps=%o showMS=%o', this.fps, this.showMillisecs);
-        let max = Math.pow(10, this.showMillisecs) ^ 0;
-        return this.fps ? this.fps : max;
+        return Math.pow(10, this.showMillisecs) ^ 0;
       },
       hoursList() {
         return getRangeHours(this.selectableRange);
@@ -248,7 +246,7 @@
 
       modifyDateField(type, value) {
         this.date.setMilliseconds((type === 'millisecs' ? value : this.millisecs) * 1000 / this.maxMillisecs ^ 0);
-        console.log('value=%o ms=%o', value, this.date.getMilliseconds());
+        console.log('value=%o ms=%o max=%o step=%o', value, this.date.getMilliseconds(), this.maxMillisecs, this.millisecStep);
         switch (type) {
           case 'hours': this.$emit('change', modifyTime(this.date, value, this.minutes, this.seconds)); break;
           case 'minutes': this.$emit('change', modifyTime(this.date, this.hours, value, this.seconds)); break;
@@ -366,3 +364,10 @@
     }
   };
 </script>
+<style>
+/*
+.el-time-spinner.has-seconds.has-milli .el-time-spinner__wrapper {
+    width:25%
+  }
+*/
+</style>

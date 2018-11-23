@@ -827,7 +827,7 @@ export default {
       this.picker.selectionMode = this.selectionMode;
       this.picker.unlinkPanels = this.unlinkPanels;
       this.picker.arrowControl = this.arrowControl || this.timeArrowControl || false;
-      this.picker.fps = this.fps;
+      this.picker.millisecStep = this.millisecStep;
       this.$watch('format', (format) => {
         this.picker.format = format;
       });
