@@ -13,14 +13,6 @@ const getI18nSettings = () => {
   };
 };
 
-const newArray = function(start, end) {
-  let result = [];
-  for (let i = start; i <= end; i++) {
-    result.push(i);
-  }
-  return result;
-};
-
 export const toDate = function(date) {
   return isDate(date) ? new Date(date) : null;
 };
@@ -108,62 +100,6 @@ export const getWeekNumber = function(src) {
   return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 };
 
-export const getRangeHours = function(ranges) {
-  const hours = [];
-  let disabledHours = [];
-
-  (ranges || []).forEach(range => {
-    const value = range.map(date => date.getHours());
-
-    disabledHours = disabledHours.concat(newArray(value[0], value[1]));
-  });
-
-  if (disabledHours.length) {
-    for (let i = 0; i < 24; i++) {
-      hours[i] = disabledHours.indexOf(i) === -1;
-    }
-  } else {
-    for (let i = 0; i < 24; i++) {
-      hours[i] = false;
-    }
-  }
-
-  return hours;
-};
-
-function setRangeData(arr, start, end, value) {
-  for (let i = start; i < end; i++) {
-    arr[i] = value;
-  }
-}
-
-export const getRangeMinutes = function(ranges, hour) {
-  const minutes = new Array(60);
-
-  if (ranges.length > 0) {
-    ranges.forEach(range => {
-      const start = range[0];
-      const end = range[1];
-      const startHour = start.getHours();
-      const startMinute = start.getMinutes();
-      const endHour = end.getHours();
-      const endMinute = end.getMinutes();
-      if (startHour === hour && endHour !== hour) {
-        setRangeData(minutes, startMinute, 60, true);
-      } else if (startHour === hour && endHour === hour) {
-        setRangeData(minutes, startMinute, endMinute + 1, true);
-      } else if (startHour !== hour && endHour === hour) {
-        setRangeData(minutes, 0, endMinute + 1, true);
-      } else if (startHour < hour && endHour > hour) {
-        setRangeData(minutes, 0, 60, true);
-      }
-    });
-  } else {
-    setRangeData(minutes, 0, 60, true);
-  }
-  return minutes;
-};
-
 export const range = function(n) {
   // see https://stackoverflow.com/questions/3746725/create-a-javascript-array-containing-1-n
   return Array.apply(null, {length: n}).map((_, n) => n);
@@ -189,11 +125,23 @@ export const clearTime = function(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };
 
-export const clearMilliseconds = function(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), 0);
+export const transformTime = function(date, format = 'HH:mm:ss') {
+  let time = parseDate(formatDate(date, format), format);
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+};
+
+export const getTimeMapping = function(format = 'HH:mm:ss') {
+  var result = dateUtil.getMapping(format);
+  var types = ['hour', 'minute', 'second', 'millisecond'];
+  var order = result.order.filter(type => {
+    return types.indexOf(type) > -1;
+  });
+  result.order = order;
+  return result;
 };
 
 export const limitTimeRange = function(date, ranges, format = 'HH:mm:ss') {
+  console.log('limitTimeRange format=%o', format);
   // TODO: refactory a more elegant solution
   if (ranges.length === 0) return date;
   const normalizeDate = date => dateUtil.parse(dateUtil.format(date, format), format);

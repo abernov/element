@@ -4,15 +4,13 @@
       v-show="visible"
       class="el-time-panel el-popper"
       :class="popperClass">
-      <div class="el-time-panel__content" :class="{ 'has-seconds': showSeconds }">
+      <div class="el-time-panel__content" :class="columns">
         <time-spinner
           ref="spinner"
           @change="handleChange"
+          :mapping="mapping"
           :arrow-control="useArrow"
-          :show-seconds="showSeconds"
-          :show-millisecs="showMillisecs"
           :millisec-step="millisecStep"
-          :am-pm-mode="amPmMode"
           @select-range="setSelectionRange"
           :date="date">
         </time-spinner>
@@ -33,7 +31,7 @@
 </template>
 
 <script type="text/babel">
-  import { limitTimeRange, isDate, clearMilliseconds, timeWithinRange } from '../util';
+  import { limitTimeRange, isDate, transformTime, timeWithinRange, getTimeMapping } from '../util';
   import Locale from 'element-ui/src/mixins/locale';
   import TimeSpinner from '../basic/time-spinner';
 
@@ -53,12 +51,14 @@
       visible(val) {
         if (val) {
           this.oldValue = this.value;
-          this.$nextTick(() => this.$refs.spinner.emitSelectRange('hours'));
+          this.$nextTick(() => this.$refs.spinner.emitSelectRange(this.mapping.order[0]));
         } else {
           this.needInitAdjust = true;
         }
       },
-
+      format(val) {
+        this.handleChange(this.date, true);
+      },
       value(newVal) {
         let date;
         if (newVal instanceof Date) {
@@ -67,7 +67,7 @@
           date = this.defaultValue ? new Date(this.defaultValue) : new Date();
         }
 
-        this.date = date;
+        this.date = this.transform(date);
         if (this.visible && this.needInitAdjust) {
           this.$nextTick(_ => this.adjustSpinners());
           this.needInitAdjust = false;
@@ -103,32 +103,32 @@
     },
 
     computed: {
-      showSeconds() {
-        return (this.format || '').indexOf('ss') !== -1;
-      },
-      showMillisecs() {
-        console.log('showMillisecs millisecStep=%o format-%o', this.millisecStep, this.format);
-        return ((this.format || '').match(/S/g) || []).length;
-      },
       useArrow() {
         return this.arrowControl || this.timeArrowControl || false;
       },
-      amPmMode() {
-        if ((this.format || '').indexOf('A') !== -1) return 'A';
-        if ((this.format || '').indexOf('a') !== -1) return 'a';
-        return '';
+      mapping() {
+        return getTimeMapping(this.format);
+      },
+      columns() {
+        let val = {};
+        val['columns' + this.mapping.order.length] = true;
+        return val;
       }
     },
-
     methods: {
+      transform(date) {
+        return transformTime(date, this.format);
+      },
+
       handleCancel() {
         this.$emit('pick', this.oldValue, false);
       },
 
-      handleChange(date) {
+      handleChange(date, force) {
         // this.visible avoids edge cases, when use scrolls during panel closing animation
-        if (this.visible) {
-          this.date = this.showMillisecs ? date : clearMilliseconds(date);
+        if (this.visible || force) {
+          this.date = this.transform(date);
+          console.log('DATE %o%d %o%d', this.date, this.date.getMilliseconds(), date, date.getMilliseconds());
           // if date is out of range, do not emit
           if (this.isValidValue(this.date)) {
             this.$emit('pick', this.date, true);
@@ -145,7 +145,7 @@
       handleConfirm(visible = false, first) {
         if (first) return;
         const date = limitTimeRange(this.date, this.selectableRange, this.format);
-        this.$emit('pick', this.showMillisecs ? date : clearMilliseconds(date), visible, first);
+        this.$emit('pick', this.transform(date), visible, first);
       },
 
       handleKeydown(event) {
@@ -178,12 +178,11 @@
       },
 
       changeSelectionRange(step) {
-        const list = [0, 3].concat(this.showSeconds ? [6] : []).concat(this.showMillisecs ? ['millisecs'] : []);
-        const mapping = ['hours', 'minutes'].concat(this.showSeconds ? ['seconds'] : []).concat(this.showMillisecs ? ['millisecs'] : []);
-        console.log('mapping =%o', mapping);
+        const list = this.mapping.order.map(type => {return this.mapping[type][0];});
         const index = list.indexOf(this.selectionRange[0]);
+        // console.log('changeSelectionRange mapping=%o index=%o list=%o', this.mapping.order, index, list);
         const next = (index + step + list.length) % list.length;
-        this.$refs.spinner.emitSelectRange(mapping[next]);
+        this.$refs.spinner.emitSelectRange(this.mapping.order[next]);
       }
     },
 
