@@ -107,7 +107,7 @@
         return this.arrowControl || this.timeArrowControl || false;
       },
       mapping() {
-        return getTimeMapping(this.format);
+        return getTimeMapping(this.format, this.date);
       },
       columns() {
         let val = {};

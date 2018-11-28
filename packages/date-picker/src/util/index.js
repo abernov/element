@@ -130,10 +130,30 @@ export const transformTime = function(date, format = 'HH:mm:ss') {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
 };
 
-export const getTimeMapping = function(format = 'HH:mm:ss') {
+export const getTimeMapping = function(format = 'HH:mm:ss', date) {
   var result = dateUtil.getMapping(format);
+  var delta = 0;
   var types = ['hour', 'minute', 'second', 'millisecond'];
   var order = result.order.filter(type => {
+    if (date) {
+      var pos = result[type];
+      pos[0] += delta;
+      pos[1] += delta;
+
+      if (pos[1] - pos[0] === 1) {
+        let val = -1;
+        switch (type) {
+          case 'hour': val = date.getHours(); break;
+          case 'minute': val = date.getMinutes(); break;
+          case 'second': val = date.getSeconds(); break;
+        }
+        if (val > 9) {
+          pos[1] += 1;
+          delta += 1;
+        }
+      }
+      result[type] = pos;
+    }
     return types.indexOf(type) > -1;
   });
   result.order = order;

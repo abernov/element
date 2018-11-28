@@ -14,7 +14,7 @@
             class="el-time-range-picker__body el-time-panel__content">
             <time-spinner
               ref="minSpinner"
-              :mapping="mapping"
+              :mapping="minMapping"
               :millisec-step="millisecStep"
               @change="handleMinChange"
               :arrow-control="arrowControl"
@@ -30,7 +30,7 @@
             class="el-time-range-picker__body el-time-panel__content">
             <time-spinner
               ref="maxSpinner"
-              :mapping="mapping"
+              :mapping="maxMapping"
               :millisec-step="millisecStep"
               @change="handleMaxChange"
               :arrow-control="arrowControl"
@@ -79,8 +79,8 @@
 
     computed: {
       offset() {
-        let order = this.mapping.order;
-        return this.mapping[order[order.length - 1]][1] + 3;
+        let order = this.minMapping.order;
+        return this.minMapping[order[order.length - 1]][1] + 3;
       },
 
       spinner() {
@@ -96,12 +96,15 @@
       MAX_TIME() {
         return this.transform(parseDate('23:59:59.999', 'HH:mm:ss.SSS'));
       },
-      mapping() {
-        return getTimeMapping(this.format);
+      minMapping() {
+        return getTimeMapping(this.format, this.minDate);
+      },
+      maxMapping() {
+        return getTimeMapping(this.format, this.maxDate);
       },
       columns() {
         let val = {};
-        val['columns' + this.mapping.order.length] = true;
+        val['columns' + this.minMapping.order.length] = true;
         return val;
       }
     },
@@ -154,7 +157,7 @@
       visible(val) {
         if (val) {
           this.oldValue = this.value;
-          this.$nextTick(() => this.$refs.minSpinner.emitSelectRange(this.mapping.order[0]));
+          this.$nextTick(() => this.$refs.minSpinner.emitSelectRange(this.minMapping.order[0]));
         }
       }
     },
@@ -226,13 +229,13 @@
 
       changeSelectionRange(step) {
         console.log('changeSelectionRange format=%o', this.format);
-        const order = this.mapping.order;
+        const order = this.minMapping.order;
 
-        const getList = delta => {
-          return order.map(type => {return this.mapping[type][0] + delta;});
+        const getList = (mapping, delta) => {
+          return order.map(type => {return mapping[type][0] + delta;});
         };
 
-        const list = getList(0).concat(getList(this.offset));
+        const list = getList(this.minMapping, 0).concat(getList(this.maxMapping, this.offset));
         const index = list.indexOf(this.selectionRange[0]);
         console.log('list sel=%o index=%d offest=%d %o', this.selectionRange[0], index, this.offset, list);
         const next = (index + step + list.length) % list.length;
