@@ -9,11 +9,7 @@ export default {
 
   props: {
     isRange: Boolean,
-    arrowControl: Boolean,
-    millisecStep: {
-      type: Number,
-      default: 1
-    }
+    arrowControl: Boolean
   },
 
   data() {

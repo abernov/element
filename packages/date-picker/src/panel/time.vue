@@ -10,7 +10,8 @@
           @change="handleChange"
           :mapping="mapping"
           :arrow-control="useArrow"
-          :millisec-step="millisecStep"
+          :steps="parsedSteps"
+          :selectable-range="selectableRange"
           @select-range="setSelectionRange"
           :date="date">
         </time-spinner>
@@ -31,7 +32,7 @@
 </template>
 
 <script type="text/babel">
-  import { limitTimeRange, isDate, transformTime, timeWithinRange, getTimeMapping } from '../util';
+  import { limitTimeRange, isDate, transformTime, timeWithinRange, getTimeMapping, parseDate } from '../util';
   import Locale from 'element-ui/src/mixins/locale';
   import TimeSpinner from '../basic/time-spinner';
 
@@ -74,10 +75,6 @@
         }
       },
 
-      selectableRange(val) {
-        this.$refs.spinner.selectableRange = val;
-      },
-
       defaultValue(val) {
         if (!isDate(this.value)) {
           this.date = val ? new Date(val) : new Date();
@@ -98,7 +95,7 @@
         disabled: false,
         arrowControl: false,
         needInitAdjust: true,
-        millisecStep: 1
+        steps: ''
       };
     },
 
@@ -113,6 +110,9 @@
         let val = {};
         val['columns' + this.mapping.order.length] = true;
         return val;
+      },
+      parsedSteps() {
+        return this.steps ? parseDate(this.steps, this.format) : null;
       }
     },
     methods: {
@@ -128,7 +128,6 @@
         // this.visible avoids edge cases, when use scrolls during panel closing animation
         if (this.visible || force) {
           this.date = this.transform(date);
-          console.log('DATE %o%d %o%d', this.date, this.date.getMilliseconds(), date, date.getMilliseconds());
           // if date is out of range, do not emit
           if (this.isValidValue(this.date)) {
             this.$emit('pick', this.date, true);
@@ -137,7 +136,6 @@
       },
 
       setSelectionRange(start, end) {
-        console.log('setSelectionRange start=%o end=%o', start, end);
         this.$emit('select-range', start, end);
         this.selectionRange = [start, end];
       },
@@ -180,7 +178,6 @@
       changeSelectionRange(step) {
         const list = this.mapping.order.map(type => {return this.mapping[type][0];});
         const index = list.indexOf(this.selectionRange[0]);
-        // console.log('changeSelectionRange mapping=%o index=%o list=%o', this.mapping.order, index, list);
         const next = (index + step + list.length) % list.length;
         this.$refs.spinner.emitSelectRange(this.mapping.order[next]);
       }

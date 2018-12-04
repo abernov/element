@@ -109,8 +109,8 @@ export const modifyDate = function(date, y, m, d) {
   return new Date(y, m, d, date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds());
 };
 
-export const modifyTime = function(date, h, m, s) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, date.getMilliseconds());
+export const modifyTime = function(date, h, m, s, ms) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m, s, ms);
 };
 
 export const modifyWithTimeString = (date, time) => {
@@ -126,8 +126,7 @@ export const clearTime = function(date) {
 };
 
 export const transformTime = function(date, format = 'HH:mm:ss') {
-  let time = parseDate(formatDate(date, format), format);
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
+  return parseDate(formatDate(date, format), format);
 };
 
 export const getTimeMapping = function(format = 'HH:mm:ss', date) {
@@ -161,10 +160,9 @@ export const getTimeMapping = function(format = 'HH:mm:ss', date) {
 };
 
 export const limitTimeRange = function(date, ranges, format = 'HH:mm:ss') {
-  console.log('limitTimeRange format=%o', format);
   // TODO: refactory a more elegant solution
-  if (ranges.length === 0) return date;
   const normalizeDate = date => dateUtil.parse(dateUtil.format(date, format), format);
+  if (!ranges || ranges.length === 0) return normalizeDate(date);
   const ndate = normalizeDate(date);
   const nranges = ranges.map(range => range.map(normalizeDate));
   if (nranges.some(nrange => ndate >= nrange[0] && ndate <= nrange[1])) return date;
@@ -174,7 +172,7 @@ export const limitTimeRange = function(date, ranges, format = 'HH:mm:ss') {
 
   nranges.forEach(nrange => {
     minDate = new Date(Math.min(nrange[0], minDate));
-    maxDate = new Date(Math.max(nrange[1], minDate));
+    maxDate = new Date(Math.max(nrange[1], maxDate));
   });
 
   const ret = ndate < minDate ? minDate : maxDate;
