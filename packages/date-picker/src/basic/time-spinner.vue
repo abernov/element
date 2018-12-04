@@ -66,7 +66,7 @@
       date: {},
       defaultValue: {}, // reserved for future use
       steps: {
-        type: Object,
+        type: Date,
         default: null
       },
       selectableRange: {
