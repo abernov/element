@@ -343,7 +343,7 @@
           return { val, disabled: list && list[val]};
         };
 
-        const nextDate = type => {
+        const getNextDate = type => {
           let delta = step > 0 ? this.numbSteps[type] : -this.numbSteps[type];
           switch (type) {
             case 'hour': delta = delta * 60 * 60 * 1000;break;
@@ -364,11 +364,10 @@
         let now = nextVal(type, prev, step);
 
         if ((step > 0 && now.val < prev) || (step < 0 && now.val > prev) || prev === now.val) {
-          let newDate = limitTimeRange(nextDate(type), this.selectableRange, this.format);
-          if (newDate.getTime() !== this.date.getTime()) {
-            this.$emit('change', newDate);
+          const nextDate = limitTimeRange(getNextDate(type), this.selectableRange, this.format);
+          if (nextDate.getTime() !== this.date.getTime()) {
+            this.$emit('change', nextDate);
             this.$nextTick(_ => {this.emitSelectRange(type);});
-            this.modifyDateField(type, this[type]);
             this.adjustSpinners();
           }
         } else {
