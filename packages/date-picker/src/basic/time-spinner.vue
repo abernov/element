@@ -363,9 +363,12 @@
         let prev = this[type];
         let now = nextVal(type, prev, step);
 
+        console.log('0');
         if ((step > 0 && now.val < prev) || (step < 0 && now.val > prev) || prev === now.val) {
           const nextDate = limitTimeRange(getNextDate(type), this.selectableRange, this.format);
+          console.log('1');
           if (nextDate.getTime() !== this.date.getTime()) {
+            console.log('2');
             this.$emit('change', nextDate);
             this.$nextTick(_ => {this.emitSelectRange(type);});
             this.adjustSpinners();
