@@ -364,9 +364,13 @@
         let now = nextVal(type, prev, step);
 
         if ((step > 0 && now.val < prev) || (step < 0 && now.val > prev) || prev === now.val) {
-          this.date = limitTimeRange(nextDate(type), this.selectableRange, this.format);
-          this.modifyDateField(type, this[type]);
-          this.adjustSpinners();
+          let newDate = limitTimeRange(nextDate(type), this.selectableRange, this.format);
+          if (newDate.getTime() !== this.date.getTime()) {
+            this.$emit('change', newDate);
+            this.$nextTick(_ => {this.emitSelectRange(type);});
+            this.modifyDateField(type, this[type]);
+            this.adjustSpinners();
+          }
         } else {
           if (now.disabled) return;
           this.modifyDateField(type, now.val);
