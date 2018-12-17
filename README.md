@@ -1,4 +1,5 @@
-<h1>element-ue@2.4.9 pull request 11398</h1>
+<h1>element-ue@2.4.11 pull request 11398</h1>
+<p>Install: npm install git+https://github.com/abernov/element.git#tree-dist -s</p>
 
 <p align="center">
   <img src="https://cdn.rawgit.com/abernov/element/dev/element_logo.svg">
