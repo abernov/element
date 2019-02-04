@@ -106,6 +106,7 @@
       },
       allowDrag: Function,
       allowDrop: Function,
+      beforeNodeDrop: Function,
       props: {
         default() {
           return {
@@ -471,15 +472,18 @@
             const data = draggingNode.node.data;
             value = {data};
           }
+          var action = (typeof this.beforeNodeDrop !== 'function') ? 'move' : this.beforeNodeDrop(draggingNode.node, dropNode.node, dropType, event);
+          var doMove = action === 'move';
+          if (!doMove || action !== 'copy') return;
           if (dropType === 'before') {
-            draggingNode.node.remove();
+            if (doMove) draggingNode.node.remove();
             dropNode.node.parent.insertBefore(value, dropNode.node);
           } else if (dropType === 'after') {
-            draggingNode.node.remove();
+            if (doMove) draggingNode.node.remove();
             dropNode.node.parent.insertAfter(value, dropNode.node);
           } else if (dropType === 'inner') {
             dropNode.node.expand(() => {
-              draggingNode.node.remove();
+              if (doMove) draggingNode.node.remove();
               dropNode.node.insertChild(value);
               emitEvents();
             });
