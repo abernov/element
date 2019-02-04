@@ -465,26 +465,20 @@
         event.dataTransfer.dropEffect = 'move';
 
         if (draggingNode && dropNode) {
-          var value;
-          if (this.store.lazy) {
-            value = draggingNode.node;
-          } else {
-            const data = draggingNode.node.data;
-            value = {data};
-          }
+          const draggingNodeCopy = { data: draggingNode.node.data };
           var action = (typeof this.beforeNodeDrop !== 'function') ? 'move' : this.beforeNodeDrop(draggingNode.node, dropNode.node, dropType, event);
           var doMove = action === 'move';
           if (!doMove && action !== 'copy') return;
           if (dropType === 'before') {
             if (doMove) draggingNode.node.remove();
-            dropNode.node.parent.insertBefore(value, dropNode.node);
+            dropNode.node.parent.insertBefore(draggingNodeCopy, dropNode.node);
           } else if (dropType === 'after') {
             if (doMove) draggingNode.node.remove();
-            dropNode.node.parent.insertAfter(value, dropNode.node);
+            dropNode.node.parent.insertAfter(draggingNodeCopy, dropNode.node);
           } else if (dropType === 'inner') {
             dropNode.node.expand(() => {
               if (doMove) draggingNode.node.remove();
-              dropNode.node.insertChild(value);
+              dropNode.node.insertChild(draggingNodeCopy);
               emitEvents();
             });
             return;
