@@ -467,7 +467,7 @@
         if (draggingNode && dropNode) {
           const action = typeof this.beforeNodeDrop !== 'function' ? 'move' : this.beforeNodeDrop(draggingNode.node, dropNode.node, dropType, event);
           const doMove = action === 'move';
-          const draggingNodeCopy = (this.store.lazy && doMove) ? draggingNode.node : { data: draggingNode.node.data };
+          const draggingNodeCopy = { data: draggingNode.node.data };
           if (action === 'remove') {
             draggingNode.node.remove();
             return emitEvents();
