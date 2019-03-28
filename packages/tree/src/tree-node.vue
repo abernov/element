@@ -197,8 +197,9 @@
           this.tree.$emit('node-collapse', this.node.data, this.node, this);
           this.node.collapse();
         } else {
-          this.node.expand();
-          this.$emit('node-expand', this.node.data, this.node, this);
+          this.node.expand(() => {
+            this.$emit('node-expand', this.node.data, this.node, this);
+          });
         }
       },
 
