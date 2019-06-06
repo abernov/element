@@ -1,95 +1,3 @@
-<script>
-  export default {
-    data() {
-      return {
-        activeName: 'second',
-        activeName2: 'first',
-        editableTabsValue: '2',
-        editableTabsValue2: '2',
-        editableTabs: [{
-          title: 'Tab 1',
-          name: '1',
-          content: 'Tab 1 content'
-        }, {
-          title: 'Tab 2',
-          name: '2',
-          content: 'Tab 2 content'
-        }],
-        editableTabs2: [{
-          title: 'Tab 1',
-          name: '1',
-          content: 'Tab 1 content'
-        }, {
-          title: 'Tab 2',
-          name: '2',
-          content: 'Tab 2 content'
-        }],
-        tabIndex: 2,
-        tabPosition: 'top'
-      }
-    },
-    methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
-      handleTabsEdit(targetName, action) {
-        if (action === 'add') {
-          let newTabName = ++this.tabIndex + '';
-          this.editableTabs.push({
-            title: 'New Tab',
-            name: newTabName,
-            content: 'New Tab content'
-          });
-          this.editableTabsValue = newTabName;
-        }
-        if (action === 'remove') {
-          let tabs = this.editableTabs;
-          let activeName = this.editableTabsValue;
-          if (activeName === targetName) {
-            tabs.forEach((tab, index) => {
-              if (tab.name === targetName) {
-                let nextTab = tabs[index + 1] || tabs[index - 1];
-                if (nextTab) {
-                  activeName = nextTab.name;
-                }
-              }
-            });
-          }
-          
-          this.editableTabsValue = activeName;
-          this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-        }
-      },
-      addTab(targetName) {
-        let newTabName = ++this.tabIndex + '';
-        this.editableTabs2.push({
-          title: 'New Tab',
-          name: newTabName,
-          content: 'New Tab content'
-        });
-        this.editableTabsValue2 = newTabName;
-      },
-      removeTab(targetName) {
-        let tabs = this.editableTabs2;
-        let activeName = this.editableTabsValue2;
-        if (activeName === targetName) {
-          tabs.forEach((tab, index) => {
-            if (tab.name === targetName) {
-              let nextTab = tabs[index + 1] || tabs[index - 1];
-              if (nextTab) {
-                activeName = nextTab.name;
-              }
-            }
-          });
-        }
-        
-        this.editableTabsValue2 = activeName;
-        this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
-      }
-    }
-  }
-</script>
-
 ## Tabulación
 
 Divide colecciones de datos que están relacionados pero pertenecen a diferentes tipos.
@@ -201,7 +109,7 @@ Es posible usar el atributo `tab-position` para establecer la posición de la ta
   export default {
     data() {
       return {
-        tabPosition: 'top'
+        tabPosition: 'left'
       };
     }
   };
@@ -302,14 +210,14 @@ Solo las pestañas de tipo tarjeta soportan adición y cierre.
 <div style="margin-bottom: 20px;">
   <el-button
     size="small"
-    @click="addTab(editableTabsValue2)"
+    @click="addTab(editableTabsValue)"
   >
     add tab
   </el-button>
 </div>
-<el-tabs v-model="editableTabsValue2" type="card" closable @tab-remove="removeTab">
+<el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
   <el-tab-pane
-    v-for="(item, index) in editableTabs2"
+    v-for="(item, index) in editableTabs"
     :key="item.name"
     :label="item.title"
     :name="item.name"
@@ -321,8 +229,8 @@ Solo las pestañas de tipo tarjeta soportan adición y cierre.
   export default {
     data() {
       return {
-        editableTabsValue2: '2',
-        editableTabs2: [{
+        editableTabsValue: '2',
+        editableTabs: [{
           title: 'Tab 1',
           name: '1',
           content: 'Tab 1 content'
@@ -337,16 +245,16 @@ Solo las pestañas de tipo tarjeta soportan adición y cierre.
     methods: {
       addTab(targetName) {
         let newTabName = ++this.tabIndex + '';
-        this.editableTabs2.push({
+        this.editableTabs.push({
           title: 'New Tab',
           name: newTabName,
           content: 'New Tab content'
         });
-        this.editableTabsValue2 = newTabName;
+        this.editableTabsValue = newTabName;
       },
       removeTab(targetName) {
-        let tabs = this.editableTabs2;
-        let activeName = this.editableTabsValue2;
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
         if (activeName === targetName) {
           tabs.forEach((tab, index) => {
             if (tab.name === targetName) {
@@ -358,8 +266,8 @@ Solo las pestañas de tipo tarjeta soportan adición y cierre.
           });
         }
         
-        this.editableTabsValue2 = activeName;
-        this.editableTabs2 = tabs.filter(tab => tab.name !== targetName);
+        this.editableTabsValue = activeName;
+        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
       }
     }
   }
@@ -392,6 +300,6 @@ Solo las pestañas de tipo tarjeta soportan adición y cierre.
 | -------- | ------------------------------------------------------------ | ------- | ----------------- | ------------------------------------------------------------ |
 | label    | título de la pestaña                                         | string  | —                 | —                                                            |
 | disabled | si la Tabulación está deshabilitada                          | boolean | —                 | false                                                        |
-| name     | identificador correspondiente al activeName de la Tabulación, representando el alias del tab-pane | string  | —                 | número ordinal del tab-pane en la secuencia, p.ej el primer tab-pane de pestañas es '1' |
+| name     | identificador correspondiente al value de la Tabulación, representando el alias del tab-pane | string  | —                 | número ordinal del tab-pane en la secuencia, p.ej el primer tab-pane de pestañas es '1' |
 | closable | si el Tab es cerrable                                        | boolean | —                 | false                                                        |
 | lazy     | si Tab es renderizado con `lazy-load`                        | boolean | —                 | false                                                        |

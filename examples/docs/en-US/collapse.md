@@ -1,29 +1,3 @@
-<script>
-  export default {
-    data() {
-      return {
-        activeNames: ['1'],
-        activeName: '1'
-      };
-    },
-    methods: {
-      handleChange(val) {
-        console.log(val);
-      }
-    }
-  }
-</script>
-
-<style>
-  .demo-collapse {
-    .el-collapse-item__header {
-      .header-icon {
-        margin-left: 5px;
-      }
-    }
-  }
-</style>
-
 ## Collapse
 
 Use Collapse to store contents.
@@ -152,5 +126,6 @@ Besides using the `title` attribute, you can customize panel title with named sl
 ### Collapse Item Attributes
 | Attribute      | Description          | Type      | Accepted Values       | Default  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
-| name | unique identification of the panel | string/number | — | — |
-| title | title of the panel | string | — | — |
+| name      | unique identification of the panel | string/number | — | — |
+| title     | title of the panel                 | string        | — | — |
+| disabled  | disable the collapse item          | boolean       | — | — |

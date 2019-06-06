@@ -66,7 +66,7 @@
     transformTime,
     timeWithinRange,
     getTimeMapping
-  } from '../util';
+  } from 'element-ui/src/utils/date-util';
   import Locale from 'element-ui/src/mixins/locale';
   import TimeSpinner from '../basic/time-spinner';
 

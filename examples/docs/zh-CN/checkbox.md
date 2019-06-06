@@ -1,47 +1,3 @@
-<script>
-  const cityOptions = ['上海', '北京', '广州', '深圳'];
-  module.exports = {
-    data() {
-      return {
-        checkList: ['选中且禁用','复选框 A'],
-        // checkList2: ['复选框 A'],
-        checked: true,
-        checked1: false,
-        checked2: true,
-        checked3: true,
-        checked4: false,
-        checked5: false,
-        checked6: true,
-        isValid: '可用',
-        checkAll: false,
-        cities: cityOptions,
-        checkedCities: ['上海', '北京'],
-        checkedCities1: ['上海', '北京'],
-        isIndeterminate: true,
-        checkboxGroup1: ['上海'],
-        checkboxGroup2: ['上海'],
-        checkboxGroup3: ['上海'],
-        checkboxGroup4: ['上海'],
-        checkboxGroup5: [],
-        checkboxGroup6: []
-      };
-    },
-    methods: {
-      handleChange(ev) {
-        console.log(ev);
-      },
-      handleCheckAllChange(val) {
-        this.checkedCities = val ? cityOptions : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.cities.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
-      }
-    }
-  };
-</script>
 ## Checkbox 多选框
 一组备选项中进行多选
 
@@ -171,7 +127,7 @@
 ```html
 <template>
   <el-checkbox-group 
-    v-model="checkedCities1"
+    v-model="checkedCities"
     :min="1"
     :max="2">
     <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
@@ -182,7 +138,7 @@
   export default {
     data() {
       return {
-        checkedCities1: ['上海', '北京'],
+        checkedCities: ['上海', '北京'],
         cities: cityOptions
       };
     }
@@ -243,21 +199,21 @@
 ```html
 <template>
   <div>
-    <el-checkbox v-model="checked3" label="备选项1" border></el-checkbox>
-    <el-checkbox v-model="checked4" label="备选项2" border></el-checkbox>
+    <el-checkbox v-model="checked1" label="备选项1" border></el-checkbox>
+    <el-checkbox v-model="checked2" label="备选项2" border></el-checkbox>
   </div>
   <div style="margin-top: 20px">
-    <el-checkbox v-model="checked5" label="备选项1" border size="medium"></el-checkbox>
-    <el-checkbox v-model="checked6" label="备选项2" border size="medium"></el-checkbox>
+    <el-checkbox v-model="checked3" label="备选项1" border size="medium"></el-checkbox>
+    <el-checkbox v-model="checked4" label="备选项2" border size="medium"></el-checkbox>
   </div>
   <div style="margin-top: 20px">
-    <el-checkbox-group v-model="checkboxGroup5" size="small">
+    <el-checkbox-group v-model="checkboxGroup1" size="small">
       <el-checkbox label="备选项1" border></el-checkbox>
       <el-checkbox label="备选项2" border disabled></el-checkbox>
     </el-checkbox-group>
   </div>
   <div style="margin-top: 20px">
-    <el-checkbox-group v-model="checkboxGroup6" size="mini" disabled>
+    <el-checkbox-group v-model="checkboxGroup2" size="mini" disabled>
       <el-checkbox label="备选项1" border></el-checkbox>
       <el-checkbox label="备选项2" border></el-checkbox>
     </el-checkbox-group>
@@ -268,12 +224,12 @@
   export default {
     data () {
       return {
-        checked3: true,
-        checked4: false,
-        checked5: false,
-        checked6: true,
-        checkboxGroup5: [],
-        checkboxGroup6: []
+        checked1: true,
+        checked2: false,
+        checked3: false,
+        checked4: true,
+        checkboxGroup1: [],
+        checkboxGroup2: []
       };
     }
   }

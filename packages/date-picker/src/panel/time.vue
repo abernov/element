@@ -33,7 +33,7 @@
 </template>
 
 <script type="text/babel">
-  import { limitTimeRange, isDate, transformTime, timeWithinRange, getTimeMapping, parseDate } from '../util';
+  import { limitTimeRange, isDate, transformTime, timeWithinRange, getTimeMapping, parseDate } from 'element-ui/src/utils/date-util';
   import Locale from 'element-ui/src/mixins/locale';
   import TimeSpinner from '../basic/time-spinner';
 

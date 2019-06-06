@@ -1,28 +1,3 @@
-<script>
-  export default {
-    data() {
-      return {
-        activeNames: ['1'],
-        activeName: '1'
-      };
-    },
-    methods: {
-      handleChange(val) {
-        console.log(val);
-      }
-    }
-  }
-</script>
-<style>
-  .demo-collapse {
-    .el-collapse-item__header {
-      .header-icon {
-        margin-left: 5px;
-      }
-    }
-  }
-</style>
-
 ## Collapse 折叠面板
 
 通过折叠面板收纳内容区域
@@ -151,5 +126,6 @@
 ### Collapse Item Attributes
 | 参数      | 说明          | 类型      | 可选值                           | 默认值  |
 |---------- |-------------- |---------- |--------------------------------  |-------- |
-| name | 唯一标志符 | string/number | — | — |
-| title | 面板标题 | string | — | — |
+| name      | 唯一标志符      | string/number | —     | —    |
+| title     | 面板标题        | string        | —     | —    |
+| disabled  | 是否禁用        | boolean       | —     | —    |
